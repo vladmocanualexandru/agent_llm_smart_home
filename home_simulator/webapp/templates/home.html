@@ -1,0 +1,39 @@
+<!doctype html>
+<html>
+    <head>
+        <title>HomeSimulator</title>
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/popup.css') }}">
+    </head>
+    <body>
+        <div id="room_container">
+            <div id="room">
+                <img id="room_layout">
+            </div>
+            
+            
+        </div>
+
+        <div id="popup" class="popup">
+            <div id="popup_header" class="popup-header">
+                <span>Sensors</span>
+            </div>
+            <div class="popup-content">
+                <table>
+                    <!-- <thead>
+                        <tr>
+                            <th>Sensor</th>
+                            <th>Value</th>
+                            <th>Unit</th>
+                        </tr>
+                    </thead> -->
+                    <tbody id="sensorsTable">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </body>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/popup_logic.js') }}"></script>
+</html>

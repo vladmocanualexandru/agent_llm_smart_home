@@ -1,0 +1,50 @@
+.popup {
+    position: absolute;
+    top: 10em;
+    left: 10em;
+    border: 0.3em solid orange;
+    background-color: black;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+    border-radius:5%;
+    z-index: 1000;
+}
+
+.popup-header {
+    padding: 10px;
+    background-color: orange;
+    cursor: move;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.popup-content {
+    padding: 10px;
+}
+
+.popup table {
+    width: 100%;
+    border-collapse: collapse;
+    color: orange;
+    background-color: black;
+}
+
+.popup table th, .popup table td {
+    border: 1px solid orange;
+    padding: 8px;
+    text-align: left;
+}
+
+.popup table th {
+    background-color: orange;
+    color: black;
+    font-weight: bold;
+}
+
+.popup table tr:nth-child(even) {
+    background-color: #333;
+}
+
+.popup table tr:hover {
+    background-color: #555;
+}

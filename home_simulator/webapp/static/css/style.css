@@ -1,0 +1,101 @@
+* {
+    user-select: none;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+div#room_container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+div#room {
+    display: inline-block;
+    position: relative;
+}
+
+div#room img#room_layout {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    content: url('../images/room.jpg');
+    /* filter: brightness(50%); */
+}
+
+div.control {
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 90%;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 4.5%;
+    height: 6.5%;
+    background-color: orange;
+    border: 0.3em solid orange;
+    border-radius: 50%;
+    transition: transform 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
+    box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.3);
+}
+
+div.control.cog {
+    background-image: url('../images/cog.svg');
+}
+
+div.control.light {
+    background-image: url('../images/light.svg');
+}
+
+div.control.humidifier {
+    background-image: url('../images/humidifier.png');
+}
+
+div.control.dehumidifier {
+    background-image: url('../images/dehumidifier.png');
+}
+
+
+div.control.heater {
+    background-image: url('../images/heater.svg');
+    background-size: 83%;
+}
+
+div.control.tv {
+    background-image: url('../images/tv.svg');
+}
+
+div.control.curtains {
+    background-image: url('../images/curtains.svg');
+}
+
+div.control.massage_seat {
+    background-image: url('../images/massage_seat.png');
+}
+
+div.control.ac {
+    background-image: url('../images/ac.svg');
+    background-size: 80%;
+}
+
+div.control:hover {
+    transition: transform 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    transform: scale(1.2);
+
+    box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.3);
+    
+    background-color: orange;
+    border-color: black;
+    cursor:pointer;
+}
