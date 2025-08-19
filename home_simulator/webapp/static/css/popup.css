@@ -2,7 +2,7 @@
     position: absolute;
     top: 48em;
     left: 70em;
-    border: 0.3em solid orange;
+    border: 0.3em solid #ff8800;
     background-color: black;
     box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
     border-radius:5%;
@@ -11,7 +11,7 @@
 
 .popup-header {
     padding: 10px;
-    background-color: orange;
+    background-color: #ff8800;
     cursor: move;
     display: flex;
     justify-content: space-between;
@@ -25,18 +25,18 @@
 .popup table {
     width: 100%;
     border-collapse: collapse;
-    color: orange;
+    color: #ff8800;
     background-color: black;
 }
 
 .popup table th, .popup table td {
-    border: 1px solid orange;
+    border: 1px solid #ff8800;
     padding: 8px;
     text-align: left;
 }
 
 .popup table th {
-    background-color: orange;
+    background-color: #ff8800;
     color: black;
     font-weight: bold;
 }

@@ -26,12 +26,16 @@ function updateRoom() {
                         control.style.top = device.ui.y + "%";
                         control.id = "control_" + prop;
 
+                        control.addEventListener("click", function() {
+                            fetch(`/device/${prop}/toggle`, { method: "GET" });
+                        });
+
                         room.appendChild(control);
                     } else if (device.type === "sensor") {
                         let sensor = document.createElement("tr");
                         sensor.className = "sensor";
                         sensor.id = "sensor_" + prop;
-                        sensor.innerHTML = "<td>" + prop + "</td><td>" + device.data.value + "</td><td>" + device.data.unit + "</td>";
+                        sensor.innerHTML = `<td>${prop}</td><td>${Number(device.data.value).toFixed(2)}</td><td>${device.data.unit}</td>`;
                         sensorsTable.appendChild(sensor);
                     }
                 }
@@ -48,6 +52,6 @@ function updateRoom() {
 document.addEventListener("DOMContentLoaded", function() {
     
     updateRoom();
-    setInterval(updateRoom, 2000);
+    setInterval(updateRoom, 1000);
 
 });

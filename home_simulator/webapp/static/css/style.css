@@ -44,14 +44,14 @@ div.control {
     width: 4.5%;
     height: 6.5%;
     background-color: black;
-    border: 0.3em solid orange;
+    border: 0.2em solid #ff8800;
     border-radius: 50%;
     /* transition: transform 0.3s ease, background-color 0.3s ease, border-color 0.3s ease; */
     box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.3);
 }
 
 div.control.activated {
-    background-color: orange;
+    background-color: #ff8800;
     border-color: black;
 }
 
@@ -60,7 +60,7 @@ div.control.cog {
 }
 
 div.control.light {
-    background-image: url('../images/devices/light.svg');
+    background-image: url('../images/devices/light.png');
 }
 
 div.control.humidifier {
@@ -73,16 +73,17 @@ div.control.dehumidifier {
 
 
 div.control.heater {
-    background-image: url('../images/devices/heater.svg');
+    background-image: url('../images/devices/heater.png');
     background-size: 83%;
 }
 
 div.control.tv {
-    background-image: url('../images/devices/tv.svg');
+    background-image: url('../images/devices/tv.png');
+    background-size: 80%;
 }
 
 div.control.curtains {
-    background-image: url('../images/devices/curtains.svg');
+    background-image: url('../images/devices/curtains.png');
 }
 
 div.control.massage_seat {
@@ -90,7 +91,7 @@ div.control.massage_seat {
 }
 
 div.control.ac {
-    background-image: url('../images/devices/ac.svg');
+    background-image: url('../images/devices/ac.png');
     background-size: 80%;
 }
 

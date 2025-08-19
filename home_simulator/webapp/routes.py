@@ -1,11 +1,16 @@
 from webapp import flaskApp
 from flask import jsonify, request, render_template
+import threading
+import time
+import random
+
+CLIMATE_CHANGE_STEP_THRESHOLD=30
 
 # In-memory store for devices
 devices = {
     "heater": {
         "type": "control", 
-        "activated": True,
+        "activated": False,
         "effect": {
             "temperature_sensor":{
                 "value": 0.1,
@@ -117,7 +122,7 @@ devices = {
     },
     "air_conditioner": {
         "type": "control", 
-        "activated": True,
+        "activated": False,
         "effect": {
             "temperature_sensor":{
                 "value": -0.2,
@@ -167,6 +172,11 @@ devices = {
     }
 }
 
+steps_counter = 0
+climate_temp_variation = 0
+climate_light_variation = 0
+climate_humidity_variation = 0
+
 @flaskApp.route("/", methods=["GET"])
 def get_homepage():
     return render_template("home.html")
@@ -180,11 +190,72 @@ def get_device(device_id):
     device = devices.get(device_id)
     return jsonify(device) if device else (jsonify({"error": "Device not found"}), 404)
 
-@flaskApp.route("/device/<device_id>/set", methods=["POST"])
-def set_device(device_id):
+@flaskApp.route("/device/<device_id>/turn-on", methods=["GET"])
+def turn_on_device(device_id):
     if device_id not in devices:
         return jsonify({"error": "Device not found"}), 404
 
-    update_data = request.json
-    devices[device_id].update(update_data)
-    return jsonify({"message": "Device updated", "device": devices[device_id]})
+    devices[device_id]["activated"] = True
+    return jsonify({"message": "Device turned on", "device": devices[device_id]})
+
+@flaskApp.route("/device/<device_id>/turn-off", methods=["GET"])
+def turn_off_device(device_id):
+    if device_id not in devices:
+        return jsonify({"error": "Device not found"}), 404
+
+    devices[device_id]["activated"] = False
+    return jsonify({"message": "Device turned off", "device": devices[device_id]})
+
+@flaskApp.route("/device/<device_id>/toggle", methods=["GET"])
+def toggle_device(device_id):
+    if device_id not in devices:
+        return jsonify({"error": "Device not found"}), 404
+
+    current_state = devices[device_id].get("activated")
+    if current_state is None:
+        return jsonify({"error": "Device cannot be toggled"}), 400
+
+    devices[device_id]["activated"] = not current_state
+    return jsonify({"message": "Device toggled", "device": devices[device_id]})
+
+def update_sensors():
+    global climate_temp_variation, climate_light_variation, climate_humidity_variation, steps_counter
+
+    while True:
+        # Temperature sensor update
+        temp = devices["temperature_sensor"]["data"]["value"] + climate_temp_variation
+        for device_id, device in devices.items():
+            if device.get("activated") and "temperature_sensor" in device.get("effect", {}):
+                effect = device["effect"]["temperature_sensor"]
+                temp += effect["value"]
+        devices["temperature_sensor"]["data"]["value"] = round(temp, 2)
+
+        # Humidity sensor update
+        humidity = devices["humidity_sensor"]["data"]["value"] + climate_humidity_variation
+        for device_id, device in devices.items():
+            if device.get("activated") and "humidity_sensor" in device.get("effect", {}):
+                effect = device["effect"]["humidity_sensor"]
+                humidity += effect["value"]
+        devices["humidity_sensor"]["data"]["value"] = round(humidity, 2)
+
+        light = climate_light_variation
+        for device_id, device in devices.items():
+            if device.get("activated") and "light_sensor" in device.get("effect", {}):
+                effect = device["effect"]["light_sensor"]
+                light += effect["value"]
+        devices["light_sensor"]["data"]["value"] = max(0,round(light, 2))
+
+        time.sleep(1)
+
+        steps_counter += 1
+
+        if steps_counter % CLIMATE_CHANGE_STEP_THRESHOLD == 0:
+            steps_counter = 0
+
+            climate_temp_variation = random.uniform(-0.2, 0.2)
+            climate_light_variation = random.uniform(0, 100)
+            climate_humidity_variation = random.uniform(-0.2, 0.2)
+
+
+sensor_thread = threading.Thread(target=update_sensors, daemon=True)
+sensor_thread.start()
