@@ -5,9 +5,12 @@ from flask import jsonify, request, render_template
 devices = {
     "heater": {
         "type": "control", 
-        "data":{
-            "state": "off", "state_values": ["off", "on"], 
-            "power": "medium", "power_values": ["low", "medium", "high"]
+        "activated": True,
+        "effect": {
+            "temperature_sensor":{
+                "value": 0.1,
+                "instant": False
+            }
         },
         "ui": {
             "x": 3.5, "y": 71,
@@ -16,10 +19,12 @@ devices = {
     },
     "room_light": {
         "type": "control", 
-        "data": {
-            "state": "off", "state_values": ["off", "on"],
-            "brightness": 50, "brightness_unit":"%",
-            "color": "white", "color_values": ["white", "yellow", "orange"]
+        "activated": False,
+        "effect": {
+            "light_sensor":{
+                "value": 30,
+                "instant": True
+            }
         },
         "ui": {
             "x": 46.4, "y": 48.7,
@@ -28,10 +33,12 @@ devices = {
     },
     "reading_light": {
         "type": "control", 
-        "data": {
-            "state": "off", "state_values": ["off", "on"],
-            "brightness": 50, "brightness_unit":"%",
-            "color": "yellow", "color_values": ["white", "yellow", "orange"]
+        "activated": False,
+        "effect": {
+            "light_sensor":{
+                "value": 20,
+                "instant": True
+            }
         },
         "ui": {
             "x": 65.4, "y": 12.7,
@@ -40,35 +47,26 @@ devices = {
     },
     "party_light_left": {
         "type": "control", 
-        "data": {
-            "state": "off", "state_values": ["off", "on"],
-            "brightness": 50, "brightness_unit":"%",
-            "color": "white", "color_values": ["white", "yellow", "orange", "rainbow"],
-            "animation": "solid", "animation_values": ["solid", "blink", "fade"]
+        "activated": False,
+        "effect": {
+            "light_sensor":{
+                "value": 30,
+                "instant": True
+            }
         },
         "ui": {
             "x": 14, "y": 82,
             "icon": "light"
         }
     },
-    "party_light_right": {
-        "type": "control", 
-        "data": {
-            "state": "off", "state_values": ["off", "on"],
-            "brightness": 50, "brightness_unit":"%",
-            "color": "white", "color_values": ["white", "yellow", "orange", "rainbow"],
-            "animation": "solid", "animation_values": ["solid", "blink", "fade"]
-        },
-        "ui": {
-            "x": 87, "y": 82,
-            "icon": "light"
-        }
-    },
     "humidifier": {
         "type": "control", 
-        "data":{
-            "state": "off", "state_values": ["off", "on"], 
-            "speed": "medium", "speed_values": ["low", "medium", "high"]
+        "activated": False,
+        "effect": {
+            "humidity_sensor":{
+                "value": 0.2,
+                "instant": False
+            }
         },
         "ui": {
             "x": 38, "y": 35.2,
@@ -77,31 +75,26 @@ devices = {
     },
     "dehumidifier": {
         "type": "control", 
-        "data":{
-            "state": "off", "state_values": ["off", "on"], 
-            "speed": "medium", "speed_values": ["low", "medium", "high"]
+        "activated": False,
+        "effect": {
+            "humidity_sensor":{
+                "value": -0.1,
+                "instant": False
+            }
         },
         "ui": {
             "x": 51.7, "y": 35.2,
             "icon": "dehumidifier"
         }
     },
-    "tv": {
-        "type": "control", 
-        "data": {
-            "state": "off", "state_values": ["off", "on"],
-            "volume": 20, "volume_unit":"%",
-            "content": "youtube", "content_values": ["youtube", "netflix", "prime", "disney", "hbo"]
-        },
-        "ui": {
-            "x": 46, "y": 89.4,
-            "icon": "tv"
-        }
-    },
     "curtains_left": {
         "type": "control", 
-        "data": {
-            "position": 0, "position_unit":"%"
+        "activated": False,
+        "effect": {
+            "light_sensor":{
+                "value": -40,
+                "instant": True
+            }
         },
         "ui": {
             "x": 2, "y": 25,
@@ -110,8 +103,12 @@ devices = {
     },
     "curtains_right": {
         "type": "control", 
-        "data": {
-            "position": 0, "position_unit":"%"
+        "activated": False,
+        "effect": {
+            "light_sensor":{
+                "value": -40,
+                "instant": True
+            }
         },
         "ui": {
             "x": 93, "y": 34,
@@ -120,21 +117,31 @@ devices = {
     },
     "air_conditioner": {
         "type": "control", 
-        "data": {
-            "state": "off", "state_values": ["off", "on"],
-            "fan_speed": "medium", "fan_speed_values": ["low", "medium", "high"]
+        "activated": True,
+        "effect": {
+            "temperature_sensor":{
+                "value": -0.2,
+                "instant": False
+            }
         },
         "ui": {
             "x":44.4, "y": 0.5,
             "icon": "ac"
         }
     },
-    "massage_seat": {
+    "tv": {
         "type": "control", 
-        "data": {
-            "heat_state": "off", "heat_state_values": ["off", "light", "medium", "high"],
-            "massage_state": "off", "massage_state_values": ["off", "gentle", "medium", "strong"]
-        },
+        "activated": False,
+        "effect": {},
+        "ui": {
+            "x": 46, "y": 89.4,
+            "icon": "tv"
+        }
+    },
+    "massage_seat": {
+        "type": "control",
+        "activated": False,
+        "effect": {},
         "ui": {
             "x":68.6, "y": 29.7,
             "icon": "massage_seat"
