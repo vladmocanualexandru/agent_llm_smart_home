@@ -8,17 +8,31 @@ CLIMATE_CHANGE_STEP_THRESHOLD=30
 
 # In-memory store for devices
 devices = {
-    "heater": {
+    "heater_1": {
         "type": "control", 
         "activated": False,
         "effect": {
             "temperature_sensor":{
-                "value": 0.1,
+                "value": 0.5,
                 "instant": False
             }
         },
         "ui": {
-            "x": 3.5, "y": 71,
+            "x": 3.5, "y": 61,
+            "icon": "heater"
+        }
+    },
+    "heater_2": {
+        "type": "control", 
+        "activated": False,
+        "effect": {
+            "temperature_sensor":{
+                "value": 0.5,
+                "instant": False
+            }
+        },
+        "ui": {
+            "x": 3.5, "y": 81,
             "icon": "heater"
         }
     },
@@ -120,17 +134,31 @@ devices = {
             "icon": "curtains"
         }
     },
-    "air_conditioner": {
+    "air_conditioner_couch": {
         "type": "control", 
         "activated": False,
         "effect": {
             "temperature_sensor":{
-                "value": -0.2,
+                "value": -0.3,
                 "instant": False
             }
         },
         "ui": {
             "x":44.4, "y": 0.5,
+            "icon": "ac"
+        }
+    },
+    "air_conditioner_entry": {
+        "type": "control", 
+        "activated": False,
+        "effect": {
+            "temperature_sensor":{
+                "value": -0.3,
+                "instant": False
+            }
+        },
+        "ui": {
+            "x": 95, "y": 76,
             "icon": "ac"
         }
     },
@@ -174,7 +202,7 @@ devices = {
 
 steps_counter = 0
 climate_temp_variation = 0
-climate_light_variation = 0
+climate_light_variation = 100
 climate_humidity_variation = 0
 
 @flaskApp.route("/", methods=["GET"])

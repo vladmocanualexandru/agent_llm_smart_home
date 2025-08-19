@@ -1,10 +1,10 @@
 .popup {
     position: absolute;
-    top: 48em;
-    left: 70em;
+    top: 33%;
+    left: 33%;
     border: 0.3em solid #ff8800;
     background-color: black;
-    box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
     border-radius:5%;
     z-index: 1000;
 }
