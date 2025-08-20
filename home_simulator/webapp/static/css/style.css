@@ -47,7 +47,7 @@ div.control {
     border: 0.2em solid black;
     /* border: 0.2em solid #ff8800; */
     border-radius: 50%;
-    transition: transform 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
+    /* transition: transform 0.3s ease, background-color 0.3s ease, border-color 0.3s ease; */
     /* box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.3); */
 }
 
@@ -130,7 +130,7 @@ div.control.massage_seat.activated {
 }
 
 div.control:hover {
-    transition: transform 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    /* transition: transform 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease; */
     transform: scale(1.2);
 
     /* box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.3); */
