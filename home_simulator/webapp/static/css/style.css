@@ -8,7 +8,7 @@ html, body {
     overflow: hidden;
     width: 100%;
     height: 100%;
-    background-color: black;
+    background-color: white;
     font-family: Arial, Helvetica, sans-serif;
 }
 
@@ -37,23 +37,23 @@ div.control {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    background-size: 90%;
+    background-size: 80%;
     position: absolute;
     left: 50%;
     top: 50%;
     width: 4.5%;
     height: 6.5%;
-    background-color: black;
-    border: 0.2em solid black;
+    background-color: white;
+    /* border: 0.1em solid black; */
     /* border: 0.2em solid #ff8800; */
     border-radius: 50%;
     /* transition: transform 0.3s ease, background-color 0.3s ease, border-color 0.3s ease; */
-    /* box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.3); */
+    box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.3);
 }
 
 div.control.activated {
-    background-color: #ff8800;
-    border-color: #ff8800;
+    background-color: #77dd77;
+    /* border-color: #77dd77; */
     /* border-color: black; */
 }
 
@@ -62,38 +62,38 @@ div.control.cog {
 }
 
 div.control.light {
-    background-image: url('../images/devices/light.svg');
+    background-image: url('../images/devices/activated/light.svg');
 }
 
 div.control.humidifier {
-    background-image: url('../images/devices/humidifier.svg');
+    background-image: url('../images/devices/activated/humidifier.svg');
 }
 
 div.control.dehumidifier {
-    background-image: url('../images/devices/dehumidifier.svg');
+    background-image: url('../images/devices/activated/dehumidifier.svg');
 }
 
 
 div.control.heater {
-    background-image: url('../images/devices/heater.svg');
+    background-image: url('../images/devices/activated/heater.svg');
     background-size: 83%;
 }
 
 div.control.tv {
-    background-image: url('../images/devices/tv.svg');
+    background-image: url('../images/devices/activated/tv.svg');
     background-size: 80%;
 }
 
 div.control.curtains {
-    background-image: url('../images/devices/curtains.svg');
+    background-image: url('../images/devices/activated/curtains.svg');
 }
 
 div.control.massage_seat {
-    background-image: url('../images/devices/massage_seat.svg');
+    background-image: url('../images/devices/activated/massage_seat.svg');
 }
 
 div.control.ac {
-    background-image: url('../images/devices/ac.svg');
+    background-image: url('../images/devices/activated/ac.svg');
     background-size: 80%;
 }
 
@@ -133,7 +133,7 @@ div.control:hover {
     /* transition: transform 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease; */
     transform: scale(1.2);
 
-    /* box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.3); */
+    box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.3);
     
     
     cursor:pointer;

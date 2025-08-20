@@ -1,17 +1,18 @@
 .popup {
     position: absolute;
-    top: 33%;
-    left: 33%;
-    border: 0.3em solid #ff8800;
-    background-color: black;
+    top: 1em;
+    left: 1em;
+    /* border: 0em solid transparent; */
+    background-color: white;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-    border-radius:5%;
+    /* border-radius:5%; */
     z-index: 1000;
 }
 
 .popup-header {
     padding: 10px;
-    background-color: #ff8800;
+    background-color: black;
+    color: white;
     cursor: move;
     display: flex;
     justify-content: space-between;
@@ -25,21 +26,21 @@
 .popup table {
     width: 100%;
     border-collapse: collapse;
-    color: #ff8800;
-    background-color: black;
+    color: black;
+    background-color: white;
 }
 
 .popup table th, .popup table td {
-    border: 1px solid #ff8800;
+    border: 1px solid black;
     padding: 8px;
     text-align: left;
 }
 
-.popup table th {
+/* .popup table th {
     background-color: #ff8800;
     color: black;
     font-weight: bold;
-}
+} */
 
 /* .popup table tr:nth-child(even) {
     background-color: #333;
