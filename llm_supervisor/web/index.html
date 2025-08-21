@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Smart Home Agent</title>
+  <style>
+    :root {
+      --bg: #0f1221;
+      --panel: #161a2e;
+      --accent: #7aa2ff;
+      --text: #e7e9f0;
+      --muted: #a7acc2;
+      --ok: #41d1a7;
+      --err: #ff7a90;
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial;
+      background: radial-gradient(1200px 800px at 20% -10%, #1a1f3f44, transparent), var(--bg);
+      color: var(--text);
+      display: grid; place-items: center;
+    }
+    .app { width: min(900px, 92vw); display: grid; gap: 14px; }
+    .header { display: flex; align-items: center; justify-content: space-between; }
+    .title { font-weight: 700; font-size: 1.15rem; letter-spacing: .2px; }
+    .endpoint { display: flex; gap: 8px; align-items: center; font-size: .9rem; color: var(--muted); }
+    .endpoint input { width: 360px; max-width: 58vw; background: #0e1130; border: 1px solid #2a2f55; color: var(--text);
+      padding: 8px 10px; border-radius: 10px; }
+
+    .panel { background: var(--panel); border: 1px solid #272c52; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,.25); }
+
+    .history { max-height: 55vh; overflow: auto; padding: 14px; display: grid; gap: 10px; }
+    .item { background: #0f1433; border: 1px solid #242a52; border-radius: 12px; padding: 12px; }
+    .meta { display: flex; gap: 10px; align-items: center; color: var(--muted); font-size: .82rem; margin-bottom: 8px; }
+    .tag { padding: 2px 8px; border-radius: 999px; border: 1px solid #2b3160; background: #121741; }
+    .user { white-space: pre-wrap; }
+    .reply { white-space: pre-wrap; margin-top: 6px; color: #e9ebff; }
+    .actions { margin-top: 8px; font-size: .85rem; color: var(--muted); }
+
+    .composer { display: grid; grid-template-columns: 1fr auto; gap: 10px; padding: 12px; }
+    textarea { resize: vertical; min-height: 70px; max-height: 260px; padding: 12px; border-radius: 14px; border: 1px solid #2a2f55; background: #0e1130; color: var(--text); }
+    .controls { display: flex; align-items: center; gap: 8px; }
+    button {
+      appearance: none; border: 1px solid #2d3566; background: linear-gradient(180deg, #2a3369, #1b2251);
+      color: white; padding: 12px 16px; border-radius: 12px; font-weight: 600; cursor: pointer; transition: .15s transform, .15s filter;
+    }
+    button:hover { filter: brightness(1.08); }
+    button:active { transform: translateY(1px); }
+    .small { font-size: .86rem; padding: 8px 12px; }
+    .checkbox { display: inline-flex; align-items: center; gap: 6px; font-size: .9rem; color: var(--muted); }
+
+    .statusbar { display: flex; justify-content: space-between; align-items: center; font-size: .86rem; color: var(--muted);
+      padding: 0 6px 10px 6px; }
+    .ok { color: var(--ok); }
+    .err { color: var(--err); }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="header">
+      <div class="title">🏠 Smart Home Agent UI</div>
+      <div class="endpoint">
+        <span>Agent:</span>
+        <input id="endpoint" value="/chat" />
+        <label class="checkbox" title="Log actions without executing">
+          <input type="checkbox" id="dryRun" /> Dry‑run
+        </label>
+        <button class="small" id="ping">Ping</button>
+      </div>
+    </div>
+
+    <div class="panel history" id="history"></div>
+
+    <div class="panel composer">
+      <textarea id="prompt" placeholder="Type a command… e.g., Make it cozy in the living room"></textarea>
+      <div class="controls">
+        <button id="send">Send</button>
+      </div>
+    </div>
+
+    <div class="statusbar">
+      <div id="status">Ready.</div>
+      <div><span id="count">0</span> messages</div>
+    </div>
+  </div>
+
+  <script>
+    const $ = (sel) => document.querySelector(sel);
+    const historyEl = $("#history");
+    const promptEl = $("#prompt");
+    const sendBtn = $("#send");
+    const statusEl = $("#status");
+    const countEl = $("#count");
+    const endpointEl = $("#endpoint");
+    const dryRunEl = $("#dryRun");
+    const pingBtn = $("#ping");
+
+    const STORAGE_KEY = "smart-agent-history-v1";
+
+    function loadHistory(){
+      try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]"); }
+      catch { return []; }
+    }
+    function saveHistory(items){
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+    }
+
+    let items = loadHistory();
+
+    function render(){
+      historyEl.innerHTML = items.map((it, idx) => `
+        <div class="item">
+          <div class="meta">
+            <span class="tag">#${idx+1}</span>
+            <span>${new Date(it.ts).toLocaleString()}</span>
+            ${it.dry_run ? '<span class="tag" title="No actions executed">dry‑run</span>' : ''}
+            ${it.error ? '<span class="tag" style="border-color:#5a2232;background:#2a1320;color:#ff9fb0;">error</span>' : ''}
+          </div>
+          <div class="user"><strong>You:</strong> ${escapeHtml(it.user)}</div>
+          ${it.error ? `<div class="reply err"><strong>Error:</strong> ${escapeHtml(it.error)}</div>` : `
+            <div class="reply"><strong>Agent:</strong> ${escapeHtml(it.reply || "(no reply)")}</div>
+            ${Array.isArray(it.actions) ? `<div class="actions">Actions: ${escapeHtml(JSON.stringify(it.actions))}</div>`: ''}
+            ${it.final_status ? `<div class="actions">Final status: ${escapeHtml(JSON.stringify(it.final_status))}</div>` : ''}
+          `}
+        </div>
+      `).join("");
+      countEl.textContent = items.length;
+    }
+
+    function escapeHtml(s){
+      return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'}[m]));
+    }
+
+    async function send(){
+      const user = promptEl.value.trim();
+      if(!user){ promptEl.focus(); return; }
+      const endpoint = endpointEl.value.trim();
+      const dry_run = !!dryRunEl.checked;
+
+      sendBtn.disabled = true; promptEl.disabled = true; statusEl.textContent = 'Thinking…';
+      try{
+        const res = await fetch(endpoint, {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ user, dry_run })
+        });
+        if(!res.ok){ throw new Error(`HTTP ${res.status}`); }
+        const data = await res.json();
+        const record = { ts: Date.now(), user, dry_run, ...data };
+        items.push(record);
+        saveHistory(items);
+        render();
+        promptEl.value = '';
+        historyEl.scrollTop = historyEl.scrollHeight;
+        statusEl.innerHTML = `<span class="ok">Done.</span>`;
+      }catch(err){
+        const record = { ts: Date.now(), user, dry_run, error: err.message };
+        items.push(record); saveHistory(items); render();
+        statusEl.innerHTML = `<span class="err">${escapeHtml(err.message)}</span>`;
+      }finally{
+        sendBtn.disabled = false; promptEl.disabled = false; promptEl.focus();
+      }
+    }
+
+    function bind(){
+      sendBtn.addEventListener('click', send);
+      promptEl.addEventListener('keydown', (e)=>{
+        if(e.key === 'Enter' && (e.ctrlKey || e.metaKey)) send();
+      });
+      pingBtn.addEventListener('click', async ()=>{
+        const base = endpointEl.value.replace(/\/chat\/?$/, '');
+        try{
+          const r = await fetch(base + '/healthz');
+          statusEl.textContent = r.ok ? 'Agent reachable.' : 'Health check failed.';
+        }catch{
+          statusEl.textContent = 'Agent not reachable.';
+        }
+      });
+    }
+
+    bind();
+    render();
+  </script>
+</body>
+</html>
