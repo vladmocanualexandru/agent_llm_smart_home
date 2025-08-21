@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<style>
+    textarea#promptTextArea {
+        flex: 1;
+        width: 96%;
+        padding:2%;
+        resize: none;
+        border: 2px solid #ccc;
+        border-radius: 8px;
+
+        font-size: 1rem;
+        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+        transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    textarea#promptTextArea:focus {
+        border-color: #007BFF;
+        box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+        outline: none;
+    }
+
+    button#sendButton {
+        width: 100%;
+        height: 2em;
+        margin-top:1em;
+        background-color: #007BFF;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 1.2rem;
+        font-weight: bold;
+        cursor: pointer;
+        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+        transition: background-color 0.3s, box-shadow 0.3s;
+    }
+
+    button#sendButton:hover {
+        background-color: #0056b3;
+        box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+    }
+
+    button#sendButton:active {
+        background-color: #003f7f;
+    }
+</style>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Smart Home Agent</title>
+ 
+</head>
+<body style="padding: 1em; display: flex; flex-direction: column; height: calc(100vh - 2em); margin: 0;"></body>
+
+<div style="display: flex; flex-direction: column; height: 100vh; margin: 0;">
+    <textarea id="promptTextArea"></textarea>
+    <button id="sendButton">Send</button>
+
+    <div id="loadingAnimation" style="display: none; text-align: center; margin-top: 1em;">
+        <div style="display: inline-block; width: 2em; height: 2em; border: 4px solid #ccc; border-top: 4px solid #007BFF; border-radius: 50%; animation: spin 1s linear infinite;"></div>
+    </div>
+
+    <style>
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</div>
+
+<script>
+    const userInput = document.getElementById('promptTextArea');
+    const sendButton = document.getElementById('sendButton');
+
+    async function sendAgentPrompt(user){
+
+      console.log("Sending user input to agent:", user);
+
+      const dry_run = false
+      response = await fetch('/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ user, dry_run })
+      })
+
+      if(!response.ok){ throw new Error(`HTTP ${response.status}`); }
+      const data = await response.json();
+
+      console.log("Agent replied: ", data);
+
+      userInput.disabled = false;
+    sendButton.style.display = 'block';
+    document.getElementById('loadingAnimation').style.display = 'none';
+      userInput.value = '';
+      userInput.focus();
+    }
+
+    // Handle sending a prompt
+    const sendPrompt = () => {
+      const userPrompt = userInput.value.trim();
+      if (!userPrompt) return;
+
+      sendAgentPrompt(userPrompt);
+      userInput.disabled = true;
+    sendButton.style.display = 'none';
+    document.getElementById('loadingAnimation').style.display = 'block';
+      
+    };
+
+    // Event listeners
+    sendButton.addEventListener('click', sendPrompt);
+    userInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') sendPrompt();
+    });
+
+  </script>
+
+</body>
+</html>

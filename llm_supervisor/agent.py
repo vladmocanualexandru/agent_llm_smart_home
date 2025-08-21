@@ -14,7 +14,7 @@ SIM_BASE    = os.getenv("SIM_BASE", "http://localhost:5555")  # your simulator
 client = OpenAI(base_url=OLLAMA_BASE, api_key="ollama")  # key ignored by Ollama
 app = FastAPI(title="Smart Home Agent")
 
-WEB_ROOT = os.path.join(os.path.dirname(__file__), "web")
+WEB_ROOT = os.path.join(os.path.dirname(__file__), "static")
 app.mount("/assets", StaticFiles(directory=WEB_ROOT), name="assets")    
 
 @app.get("/")

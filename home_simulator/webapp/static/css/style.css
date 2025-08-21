@@ -52,8 +52,10 @@ div.control {
 }
 
 div.control.activated {
-    background-color: #77dd77;
-    /* border-color: #77dd77; */
+    background-color: #FF7F06;
+    box-shadow: 0px 0px 6px rgba(255, 255, 255, 0.7);
+    filter:invert(1)
+    /* border-color: #007BFF; */
     /* border-color: black; */
 }
 
@@ -131,10 +133,6 @@ div.control.massage_seat.activated {
 
 div.control:hover {
     /* transition: transform 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease; */
-    transform: scale(1.2);
-
-    box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.3);
-    
-    
+    transform: scale(1.2);   
     cursor:pointer;
 }
